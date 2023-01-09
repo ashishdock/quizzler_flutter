@@ -63,6 +63,33 @@ class _QuizPageState extends State<QuizPage> {
 //  Question q1 = Question(
 //      q: 'You can lead a cow down stairs but not up stairs.', a: false);
 
+  List<Icon> scoreKeeper = [];
+
+  void checkAnswer(bool userPickedAnswer) {
+    bool correctAnswer = quizBrain.getCorrectAnswer();
+    setState(() {
+      if (userPickedAnswer == correctAnswer) {
+        print("User got it right.");
+        scoreKeeper.add(
+          Icon(
+            Icons.check,
+            color: Colors.green,
+          ),
+        );
+      } else {
+        print("User go it wrong!");
+        scoreKeeper.add(
+          Icon(
+            Icons.close,
+            color: Colors.red,
+          ),
+        );
+      }
+
+      quizBrain.nextQuestion();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -92,20 +119,7 @@ class _QuizPageState extends State<QuizPage> {
               textColor: Colors.white,
               color: Colors.green,
               onPressed: () {
-                bool correctAnswer = quizBrain.getCorrectAnswer();
-                if (correctAnswer == true) {
-                  print("User got it right.");
-                } else {
-                  print("User go it wrong!");
-                }
-
-                setState(() {
-                  quizBrain.nextQuestion();
-//                    Icon(
-//                      Icons.check,
-//                      color: Colors.green,
-//                    ),
-                });
+                checkAnswer(true);
               },
               child: Text(
                 "True",
@@ -123,16 +137,7 @@ class _QuizPageState extends State<QuizPage> {
               textColor: Colors.white,
               color: Colors.red,
               onPressed: () {
-                bool correctAnswer = quizBrain.getCorrectAnswer();
-                if (correctAnswer == false) {
-                  print("User got it right.");
-                } else {
-                  print("User go it wrong!");
-                }
-
-                setState(() {
-                  quizBrain.nextQuestion();
-                });
+                checkAnswer(false);
               },
               child: Text(
                 "False",
@@ -144,28 +149,7 @@ class _QuizPageState extends State<QuizPage> {
           ),
         ),
         Row(
-          children: <Widget>[
-            Icon(
-              Icons.check,
-              color: Colors.green,
-            ),
-            Icon(
-              Icons.close,
-              color: Colors.red,
-            ),
-            Icon(
-              Icons.close,
-              color: Colors.red,
-            ),
-            Icon(
-              Icons.close,
-              color: Colors.red,
-            ),
-            Icon(
-              Icons.close,
-              color: Colors.red,
-            ),
-          ],
+          children: scoreKeeper,
         ),
       ],
     );
